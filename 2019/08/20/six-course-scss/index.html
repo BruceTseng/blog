@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=7.3.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=7.3.0">
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=7.3.0" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css?v=7.3.0">
+
+
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Pisces',
+    version: '7.3.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    }
+  };
+</script>
+
+  <meta name="description" content="SassSass原理要如何編譯Sass可以透過gulp、webpack等相關打包工具將CSS的程式轉成Sass語法，或是透過IDE內建插件功能來編譯。 連結詞&amp;amp;123456789101112.header &amp;#123;    .logo &amp;#123;        a &amp;#123;            &amp;amp;: hover &amp;#123;                color: r">
+<meta name="keywords" content="SCSS,CSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="六角學院 Sass課程筆記">
+<meta property="og:url" content="https://brucetseng.github.io/blog/2019/08/20/six-course-scss/index.html">
+<meta property="og:site_name" content="粒粒皆辛苦－碼農">
+<meta property="og:description" content="SassSass原理要如何編譯Sass可以透過gulp、webpack等相關打包工具將CSS的程式轉成Sass語法，或是透過IDE內建插件功能來編譯。 連結詞&amp;amp;123456789101112.header &amp;#123;    .logo &amp;#123;        a &amp;#123;            &amp;amp;: hover &amp;#123;                color: r">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-08-20T03:47:58.019Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="六角學院 Sass課程筆記">
+<meta name="twitter:description" content="SassSass原理要如何編譯Sass可以透過gulp、webpack等相關打包工具將CSS的程式轉成Sass語法，或是透過IDE內建插件功能來編譯。 連結詞&amp;amp;123456789101112.header &amp;#123;    .logo &amp;#123;        a &amp;#123;            &amp;amp;: hover &amp;#123;                color: r">
+  <link rel="canonical" href="https://brucetseng.github.io/blog/2019/08/20/six-course-scss/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>六角學院 Sass課程筆記 | 粒粒皆辛苦－碼農</title>
+  <meta name="generator" content="Hexo 3.9.0">
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  <div class="container sidebar-position-left">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">粒粒皆辛苦－碼農</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/blog/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-about">
+      
+    
+
+    <a href="/blog/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>About</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-tags">
+      
+    
+
+    <a href="/blog/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-categories">
+      
+    
+
+    <a href="/blog/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Categories</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/blog/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content page-post-detail">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  <article class="post" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://brucetseng.github.io/blog/blog/2019/08/20/six-course-scss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Bruce Tseng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="粒粒皆辛苦－碼農">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">六角學院 Sass課程筆記
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              
+                
+              
+
+              <time title="Created: 2019-08-20 11:42:16 / Modified: 11:47:58" itemprop="dateCreated datePublished" datetime="2019-08-20T11:42:16+08:00">2019-08-20</time>
+            </span>
+          
+            
+
+            
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/blog/categories/前端/" itemprop="url" rel="index"><span itemprop="name">前端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Sass"><a href="#Sass" class="headerlink" title="Sass"></a>Sass</h1><h2 id="Sass原理"><a href="#Sass原理" class="headerlink" title="Sass原理"></a>Sass原理</h2><h3 id="要如何編譯Sass"><a href="#要如何編譯Sass" class="headerlink" title="要如何編譯Sass"></a><font color="pink">要如何編譯Sass</font></h3><p>可以透過gulp、webpack等相關打包工具將CSS的程式轉成Sass語法，或是透過IDE內建插件功能來編譯。</p>
+<h3 id="連結詞-amp"><a href="#連結詞-amp" class="headerlink" title="連結詞&amp;"></a><font color="pink">連結詞&amp;</font></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">.header &#123;</span><br><span class="line">    .logo &#123;</span><br><span class="line">        a &#123;</span><br><span class="line">            &amp;: hover &#123;</span><br><span class="line">                color: red;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">相等於</span><br><span class="line">.header .logo a:hover</span><br></pre></td></tr></table></figure>
+
+<h3 id="SASS-變數-常用語法一鍵設定"><a href="#SASS-變數-常用語法一鍵設定" class="headerlink" title="SASS 變數 - 常用語法一鍵設定"></a><font color="pink">SASS 變數 - 常用語法一鍵設定</font></h3><p>Variable(變數)<br>為什麼要用變數？</p>
+<ul>
+<li>參數統一管理，若使用相同變數過多，可以同時修正內容</li>
+<li>語意化</li>
+<li>將時常需要設定的CSS放在變數來管理</li>
+<li>變數是用美元符來命名</li>
+</ul>
+<p>Example</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$main-color: #ff0000;</span><br><span class="line">$font-l: 18px;</span><br><span class="line"></span><br><span class="line">.header &#123;</span><br><span class="line">    background-color: $main-color;</span><br><span class="line">    h1 &#123;</span><br><span class="line">        font-size: $font-l;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>常見的錯誤</p>
+<ul>
+<li><p>宣告每一個屬性後都要用;結束</p>
+</li>
+<li><p>CSS編譯有順序性，因此變數要放前面</p>
+</li>
+</ul>
+<p>變數格式<br>格式</p>
+<ul>
+<li>數字：10、1px、3em</li>
+<li>字串：’test’、’../images/big/‘、字體</li>
+<li>顏色：red、#000000、rgba(255, 255, 255, 0.9)</li>
+<li>布林：true、false</li>
+<li>空值：null</li>
+<li>支援運算(1em+1em、6px*2)</li>
+</ul>
+<h3 id="藉由-darken、lighten內建功能調整明暗"><a href="#藉由-darken、lighten內建功能調整明暗" class="headerlink" title="藉由 darken、lighten內建功能調整明暗"></a><font color="pink">藉由 darken、lighten內建功能調整明暗</font></h3><p>Example</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$base-color: #008000;</span><br><span class="line">.box1 &#123;</span><br><span class="line">    background: $base-color;</span><br><span class="line">&#125;</span><br><span class="line">.box2 &#123;</span><br><span class="line">    backgorund: darken($base-color, 20%);</span><br><span class="line">&#125;</span><br><span class="line">.box3 &#123;</span><br><span class="line">    backgorund: lighten($base-color, 20%);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Sass-import-切分檔案好工具，維護管理更方便"><a href="#Sass-import-切分檔案好工具，維護管理更方便" class="headerlink" title="Sass import - 切分檔案好工具，維護管理更方便"></a><font color="pink">Sass import - 切分檔案好工具，維護管理更方便</font></h3><p>切不同類別、內容的SCSS，再整合到一個檔案做引入</p>
+<p>檔案：_variable.scss<br>檔案：_main.scss</p>
+<p>檔案：all.scss中加入, 要注意引入檔案的順序<br>@import “varaible”; //　可將SCSS檔案彙整成一隻CSS檔<br>@import “main”;</p>
+<h3 id="CSS-Reset-你知道-myerweb-與-Normalize-的差異嗎？"><a href="#CSS-Reset-你知道-myerweb-與-Normalize-的差異嗎？" class="headerlink" title="CSS Reset - 你知道 myerweb 與 Normalize 的差異嗎？"></a><font color="pink">CSS Reset - 你知道 myerweb 與 Normalize 的差異嗎？</font></h3><p>為了要清空browser原有的樣式</p>
+<ul>
+<li>Reset CSS</li>
+<li>Normalize.css (bootstrap4)</li>
+</ul>
+<p>通常工程師會寫自己的reset css</p>
+<h3 id="Mixin"><a href="#Mixin" class="headerlink" title="Mixin"></a><font color="pink">Mixin</font></h3><p>為了組合多條件，並重複使用，幫助記住CSS技巧，節省時間<br>通常會寫專門放mixin的檔案ex: _mixin.scss，再@import到all.scss中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@minin blueSize &#123;</span><br><span class="line">    color: blue;</span><br><span class="line">    font-size: 13px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.header h1 &#123;</span><br><span class="line">    @include blueSize;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>mixin也可以帶參數</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@mixin color($color, $size) &#123;</span><br><span class="line">    color: $color;</span><br><span class="line">    border: 5px solid $color;</span><br><span class="line">    text-decoration: $color;</span><br><span class="line">    font-size: $size * 1.5;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>圓型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@mixin circle($size, $bgcolor) &#123;</span><br><span class="line">    border-radius: 50%;</span><br><span class="line">    height: $size;</span><br><span class="line">    width: $size;</span><br><span class="line">    font-size: $size / 3;</span><br><span class="line">    background: $bgcolor;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="掌握-Mixin-後，寫-RWD-再也不是痛苦事"><a href="#掌握-Mixin-後，寫-RWD-再也不是痛苦事" class="headerlink" title="掌握 Mixin 後，寫 RWD 再也不是痛苦事"></a><font color="pink">掌握 Mixin 後，寫 RWD 再也不是痛苦事</font></h3><h4 id="核心語法-Mixin-content"><a href="#核心語法-Mixin-content" class="headerlink" title="核心語法 @Mixin+content"></a>核心語法 @Mixin+content</h4><p>。把media query寫到mixin中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">@mixin desktop-below &#123;</span><br><span class="line">    @media (max-width: 1023px) &#123;</span><br><span class="line">        @content</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">@mixin pad &#123;</span><br><span class="line">    @media (max-width: 768px) &#123;</span><br><span class="line">        @content</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@mixin mobile &#123;</span><br><span class="line">    @media (max-width: 568px) &#123;</span><br><span class="line">        @content</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.header &#123;</span><br><span class="line">    font-size: 20px;</span><br><span class="line">    @include pad &#123;</span><br><span class="line">        font-size: 15px;</span><br><span class="line">    &#125;</span><br><span class="line">    @include mobile &#123;</span><br><span class="line">        font-size: 13px;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Sass-響應式網頁心得總結"><a href="#Sass-響應式網頁心得總結" class="headerlink" title="Sass 響應式網頁心得總結"></a><font color="pink">Sass 響應式網頁心得總結</font></h3><p>因為Sass是由上而下編譯，要注意@import檔案的順序</p>
+<p>Example</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@import &quot;variable&quot;;</span><br><span class="line">@import &quot;normalize&quot;; // CSS reset</span><br><span class="line">@import &quot;base&quot;; // 客製化全站設定</span><br><span class="line">// mixin</span><br><span class="line">@import &quot;minin/media&quot;;</span><br><span class="line">@import &quot;mixin/textHide&quot;;</span><br><span class="line"></span><br><span class="line">@import &quot;layout&quot;;</span><br><span class="line"></span><br><span class="line">// 主要css</span><br><span class="line">@import &quot;main&quot;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Sass-CSS-設計模式－教您最實用的網頁收納術！"><a href="#Sass-CSS-設計模式－教您最實用的網頁收納術！" class="headerlink" title="Sass/CSS 設計模式－教您最實用的網頁收納術！"></a><font color="pink">Sass/CSS 設計模式－教您最實用的網頁收納術！</font></h3><h4 id="SMACSS"><a href="#SMACSS" class="headerlink" title="SMACSS"></a>SMACSS</h4><p>結構分類與命名規則</p>
+<ul>
+<li>結構分類：Base、Layout、Module、State、Theme。</li>
+<li>命名規則：id 與 class 受限制地使用、名稱使用 dash 分隔。</li>
+</ul>
+<p>結構</p>
+<ul>
+<li><p>Base：全站設定, CSS Resets。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">body, form &#123;</span><br><span class="line">    margin: 0;</span><br><span class="line">    padding: 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">a &#123;</span><br><span class="line">    color: #039;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">a:hover &#123;</span><br><span class="line">    color: #03F;    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">img &#123;</span><br><span class="line">    max-width: 100%;</span><br><span class="line">    height: auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Layout：網頁布局，例如：header, footer</p>
+<p>  Generally, a Layout style only has a single selector: a single ID or class name. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#header,</span><br><span class="line">#article,</span><br><span class="line">#footer &#123;</span><br><span class="line">    width: 960px;</span><br><span class="line">    margin: auto;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#article &#123;</span><br><span class="line">    border: solid #CCC;</span><br><span class="line">    border-width: 1px 0 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// layout中的list</span><br><span class="line">.l-list &#123;</span><br><span class="line">    width: 500px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Module：增加子模組，用class方式命名並用dash分隔，例如 .btn-primary。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">.btn &#123;</span><br><span class="line">    width: 50px;</span><br><span class="line">    height: 20px;</span><br><span class="line">    border: 1px solid transparent;</span><br><span class="line">    text-align: center;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.btn-primary &#123;</span><br><span class="line">    background: #007bff;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">btn-lg &#123;</span><br><span class="line">    padding: 10px 16px;</span><br><span class="line">    font-size: 18px;</span><br><span class="line">    line-height: 1.3333333;</span><br><span class="line">    border-radius: 6px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// html</span><br><span class="line">&lt;button class=&quot;btn btn-primary btn-lg&quot;&gt;&lt;/button&gt;</span><br></pre></td></tr></table></figure>
+
+<p>方便HTML語意化調整，盡量不指定HTML tag<br>Example</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Good</span><br><span class="line">.l-grid &#123;</span><br><span class="line">    margin: 0;</span><br><span class="line">&#125;</span><br><span class="line">.l-grid-title &#123;</span><br><span class="line">    color: #eee;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Bad</span><br><span class="line">.l-grid &#123;</span><br><span class="line">    margin: 0;</span><br><span class="line">&#125;</span><br><span class="line">.l-grid h2 &#123;</span><br><span class="line">    color: #eee;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>State：描述元件的狀態，例如：tab-item active 的 active。</li>
+<li>Theme：針對網站主視覺而定義的 Layout 或 Module 的樣式。 例如 .tab-dark。</li>
+</ul>
+<h3 id="OOCSS"><a href="#OOCSS" class="headerlink" title="OOCSS"></a>OOCSS</h3><ul>
+<li><p>結構與樣式分離</p>
+<p>  btn 結構</p>
+<p>  btn-primary　樣式</p>
+<p>  btn-lg 樣式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">CSS</span><br><span class="line">.header &#123;</span><br><span class="line">    width: 200px;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">&#125;</span><br><span class="line">.header-shadow &#123;</span><br><span class="line">    box-shadow: 10px 10px 10px #000;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.header-logo &#123;</span><br><span class="line">    float: left;</span><br><span class="line">    background: blue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 工具類的樣式分離</span><br><span class="line">.clearfix &#123;</span><br><span class="line">    overflow: hidden;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">html</span><br><span class="line">&lt;div class=&quot;header header-shadow clearfix&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;header-logo&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>容器與內容分離</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CSS</span><br><span class="line">.header &#123; &#125;</span><br><span class="line">.footer &#123; &#125;</span><br><span class="line">.btn &#123; width: 50px; &#125;</span><br><span class="line"></span><br><span class="line">html</span><br><span class="line">&lt;header class=&quot;header&quot;&gt;</span><br><span class="line">    &lt;a class=&quot;btn&quot;&gt;&lt;/a&gt;</span><br><span class="line">&lt;/header&gt;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><a href="https://960.gs/demo.html" target="_blank" rel="noopener">格線系統</a></p>
+<p><font color="pink" size="4">CSS命名</font></p>
+<p>規範</p>
+<p><a href="https://zh.wikipedia.org/wiki/%E9%A7%9D%E5%B3%B0%E5%BC%8F%E5%A4%A7%E5%B0%8F%E5%AF%AB" target="_blank" rel="noopener">駝峰式</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">小駝峰式寫法</span><br><span class="line">.bookList &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">.bookList-title &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="拋棄語意命名方式，改以工具性質來命名"><a href="#拋棄語意命名方式，改以工具性質來命名" class="headerlink" title="拋棄語意命名方式，改以工具性質來命名"></a><font color="pink">拋棄語意命名方式，改以工具性質來命名</font></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Good</span><br><span class="line">.list-title &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Bad</span><br><span class="line">.bookList-title &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>色彩</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Good</span><br><span class="line">.text-primary &#123;</span><br><span class="line">    color: blue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Bad</span><br><span class="line">.blue &#123;</span><br><span class="line">    color: blue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Layout</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Good</span><br><span class="line"></span><br><span class="line">.col-3 &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.container &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="BEM"><a href="#BEM" class="headerlink" title="BEM"></a><a href="http://getbem.com/" target="_blank" rel="noopener"><font color="pink">BEM</font></a></h3><p>Block</p>
+<p>Element</p>
+<p>Modifier</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.block&#123;&#125; //區塊 (Block)</span><br><span class="line">.block__element&#123;&#125; //元素 (Element)</span><br><span class="line">.block--modifier&#123;&#125;//修飾符（Modifier）</span><br><span class="line"></span><br><span class="line">.list &#123;&#125;</span><br><span class="line">.list__title &#123;&#125;</span><br><span class="line">.list__img &#123;&#125;</span><br><span class="line">.list__img--changeBG &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Example</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.list &#123;</span><br><span class="line">    &amp;__title &#123;</span><br><span class="line">        width: 50px;</span><br><span class="line">    &#125;</span><br><span class="line">    &amp;__img &#123;</span><br><span class="line">        height: 50px;</span><br><span class="line">        &amp;--changeBg &#123;</span><br><span class="line">            width: 50px;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.card &#123;</span><br><span class="line">    &amp;__body &#123;</span><br><span class="line">        width: 50px;</span><br><span class="line">        &amp;__title &#123;</span><br><span class="line">            height: 50px;</span><br><span class="line">            &amp;--active &#123;</span><br><span class="line">                background: blue;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">HTML</span><br><span class="line">&lt;div class=&quot;col-9&quot;&gt;</span><br><span class="line">    &lt;ul class=&quot;list list--shadow clearfix&quot;&gt;</span><br><span class="line">        &lt;li class=&quot;list__item list__item--active&quot;&gt;</span><br><span class="line">            &lt;img class=&quot;list__item__img&quot;/&gt;</span><br><span class="line">            &lt;h2 class=&quot;list__item__title&quot;&gt;&lt;/h2&gt;</span><br><span class="line">            &lt;p class=&quot;list__item__content&quot;&gt;&lt;/p&gt;</span><br><span class="line">            &lt;input type=&quot;text&quot; class=&quot;btn btn-primary&quot;/&gt;</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">        &lt;li class=&quot;list__item&quot;&gt;</span><br><span class="line">            &lt;img class=&quot;list__item__img&quot;/&gt;</span><br><span class="line">            &lt;h2 class=&quot;list__item__title&quot;&gt;&lt;/h2&gt;</span><br><span class="line">            &lt;p class=&quot;list__item__content&quot;&gt;&lt;/p&gt;</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="開發網站前，你-guidelines-規劃好了嗎？"><a href="#開發網站前，你-guidelines-規劃好了嗎？" class="headerlink" title="開發網站前，你 guidelines 規劃好了嗎？"></a><font color="pink">開發網站前，你 guidelines 規劃好了嗎？</font></h3><blockquote>
+<p>共同維護設計規範手冊<br>階層都要在四層以內<br>不要用ID</p>
+</blockquote>
+<p><a href="https://github.com/doggy8088/CSS-Guidelines" target="_blank" rel="noopener">CSS 筆記、建議與指導方針總整理</a><br><a href="https://quip.com/1zuNARsbxGe0" target="_blank" rel="noopener">電商CSS guideline</a><br><a href="https://gist.github.com/rveitch/84cea9650092119527bc" target="_blank" rel="noopener">7+1 Sass 設計模式</a></p>
+<p><a href="https://xd.adobe.com/spec/934efdb7-a7e4-47d5-572e-efece0914f62-e57f/?fbclid=IwAR2WDNlM2TCQM5rH0mter1Oy_FMDnZhZK2zd8whKej-PvLc87dtwf1NNZwU" target="_blank" rel="noopener">甜點電商設計稿</a></p>
+<p><a href="https://hexschool.github.io/THE_F2E_Design/week3-admin%20order/?fbclid=IwAR0AnUAwoUmnHt3f7JM_pf18WZSAUc10FmjtayeGwP_roNueZYSXaeIz9B4#artboard0" target="_blank" rel="noopener">訂單管理後台設計稿</a></p>
+<p><a href="https://docs.google.com/document/d/1i8qGGOppzl_oJNT_A3hI5hYEVb9abuooLRgWCfdxTnU/edit" target="_blank" rel="noopener">CSS 架構管理檢核表</a></p>
+<h3 id="錯誤的CSS設計方式"><a href="#錯誤的CSS設計方式" class="headerlink" title="錯誤的CSS設計方式"></a><font color="pink">錯誤的CSS設計方式</font></h3><blockquote>
+<p>不要在很多地方下相同資料</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">.wrap &#123; font-size: 16px; &#125;</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;wrap&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;header&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;footer&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">```   </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&gt; 勿將高度寫死</span><br></pre></td></tr></table></figure>
+
+<p>用padding或margin來撐開高度與寬度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&gt; 請勿使用ID綁定網頁樣式</span><br></pre></td></tr></table></figure>
+
+<p>ID具有錨點功能<br>ID權重比Class高，難管理<br>一個網頁只能出現一個相同ID</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&gt; 解決JS與CSS功能相互干擾</span><br></pre></td></tr></table></figure>
+
+<p>使用前贅詞</p>
+<p>document.querySelector(‘.js-hello’).addEventListener(‘click’, function() {<br>    alert(‘hello’);<br>})<br>```</p>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+          
+            
+          
+          <div class="post-tags">
+            
+              <a href="/blog/tags/SCSS/" rel="tag"># SCSS</a>
+            
+              <a href="/blog/tags/CSS/" rel="tag"># CSS</a>
+            
+          </div>
+        
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/blog/2019/08/20/javascript-core/" rel="next" title="JavaScript核心篇筆記">
+                  <i class="fa fa-chevron-left"></i> JavaScript核心篇筆記
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Bruce Tseng</p>
+  <div class="site-description motion-element" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-categories">
+        
+          
+            <a href="/blog/categories/">
+          
+        
+        
+        
+          
+        
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+          
+            <a href="/blog/tags/">
+          
+        
+        
+        
+          
+        
+          
+        
+          
+        
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span>
+        </a>
+      </div>
+    
+  </nav>
+
+
+
+
+        </div>
+      </div>
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Sass"><span class="nav-number">1.</span> <span class="nav-text">Sass</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Sass原理"><span class="nav-number">1.1.</span> <span class="nav-text">Sass原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#要如何編譯Sass"><span class="nav-number">1.1.1.</span> <span class="nav-text">要如何編譯Sass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#連結詞-amp"><span class="nav-number">1.1.2.</span> <span class="nav-text">連結詞&amp;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SASS-變數-常用語法一鍵設定"><span class="nav-number">1.1.3.</span> <span class="nav-text">SASS 變數 - 常用語法一鍵設定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#藉由-darken、lighten內建功能調整明暗"><span class="nav-number">1.1.4.</span> <span class="nav-text">藉由 darken、lighten內建功能調整明暗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sass-import-切分檔案好工具，維護管理更方便"><span class="nav-number">1.1.5.</span> <span class="nav-text">Sass import - 切分檔案好工具，維護管理更方便</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS-Reset-你知道-myerweb-與-Normalize-的差異嗎？"><span class="nav-number">1.1.6.</span> <span class="nav-text">CSS Reset - 你知道 myerweb 與 Normalize 的差異嗎？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mixin"><span class="nav-number">1.1.7.</span> <span class="nav-text">Mixin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#掌握-Mixin-後，寫-RWD-再也不是痛苦事"><span class="nav-number">1.1.8.</span> <span class="nav-text">掌握 Mixin 後，寫 RWD 再也不是痛苦事</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#核心語法-Mixin-content"><span class="nav-number">1.1.8.1.</span> <span class="nav-text">核心語法 @Mixin+content</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sass-響應式網頁心得總結"><span class="nav-number">1.1.9.</span> <span class="nav-text">Sass 響應式網頁心得總結</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sass-CSS-設計模式－教您最實用的網頁收納術！"><span class="nav-number">1.1.10.</span> <span class="nav-text">Sass/CSS 設計模式－教您最實用的網頁收納術！</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SMACSS"><span class="nav-number">1.1.10.1.</span> <span class="nav-text">SMACSS</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OOCSS"><span class="nav-number">1.1.11.</span> <span class="nav-text">OOCSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拋棄語意命名方式，改以工具性質來命名"><span class="nav-number">1.1.12.</span> <span class="nav-text">拋棄語意命名方式，改以工具性質來命名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BEM"><span class="nav-number">1.1.13.</span> <span class="nav-text">BEM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#開發網站前，你-guidelines-規劃好了嗎？"><span class="nav-number">1.1.14.</span> <span class="nav-text">開發網站前，你 guidelines 規劃好了嗎？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#錯誤的CSS設計方式"><span class="nav-number">1.1.15.</span> <span class="nav-text">錯誤的CSS設計方式</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Bruce Tseng</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.3.0</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        <span>0%</span>
+      </div>
+
+    
+
+  </div>
+
+  
+  <script src="/blog/lib/jquery/index.js?v=3.4.1"></script>
+  <script src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+<script src="/blog/js/utils.js?v=7.3.0"></script><script src="/blog/js/motion.js?v=7.3.0"></script>
+<script src="/blog/js/schemes/pisces.js?v=7.3.0"></script>
+<script src="/blog/js/next-boot.js?v=7.3.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  
+  <script src="/blog/js/scrollspy.js?v=7.3.0"></script><script src="/blog/js/post-details.js?v=7.3.0"></script>
+
+
+</body>
+</html>
